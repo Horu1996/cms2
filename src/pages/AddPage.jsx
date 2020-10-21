@@ -16,7 +16,10 @@ export class AddPage extends React.Component {
     handleSave(){
         let formData = new FormData();
         formData.append('html',this.htmlEditor.current.editor.getValue())
-        fetch("http://0994.vozhzhaev.ru/addPage",{
+        formData.append('css',this.htmlEditor.current.editor.getValue())
+        formData.append('js',this.htmlEditor.current.editor.getValue())
+
+        fetch("http://u96470ux.beget.tech/addPage",{
             method: 'POST',
             body: formData
         })
