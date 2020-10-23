@@ -6,7 +6,8 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "emmet-core"
 import "ace-builds/src-noconflict/ext-emmet"
-export class AddPage extends React.Component {
+
+export class EditPage extends React.Component{
     constructor() {
         super();
         this.htmlEditor = createRef();
@@ -14,31 +15,53 @@ export class AddPage extends React.Component {
         this.jsEditor = createRef();
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.state = {
-            name: "",
-            title: ""
-        }
     }
-
-    handleSave(){
-        let formData = new FormData();
-        formData.append('name', this.state.name);
-        formData.append('title', this.state.title);
-        formData.append('html',this.htmlEditor.current.editor.getValue())
-        formData.append('css',this.cssEditor.current.editor.getValue())
-        formData.append('js',this.jsEditor.current.editor.getValue())
-
-
-        fetch("http://u96470ux.beget.tech/addPage",{
+    componentDidMount() {
+        const formData = new FormData();
+        const uri = window.location.pathname.split("/");
+        const pageId = uri[uri.length-1];
+        formData.append("pageId",pageId);
+        fetch("http://u96470ux.beget.tech/editPage", {
             method: 'POST',
             body: formData
         })
+            .then((response)=>response.json())
+            .then((page)=>{
+                this.htmlEditor.current.editor.setValue(page.html)
+                this.cssEditor.current.editor.setValue(page.css)
+                this.jsEditor.current.editor.setValue(page.js)
+                //this.handleInputChange.name(page.name)
+                //this.handleInputChange.title(page.title)
+                 /*this.handleInputChange({
+                     [name]: page.name
+                 })*/
+            })
+
+    }
+    handleSave(){
+
+        //let cssSobr;
+        //let jsSobr;
+        let formData = new FormData();
+        const uri = window.location.pathname.split("/");
+        const pageId = uri[uri.length-1];
+        formData.append("pageId",pageId);
+        formData.append('name', this.handleInputChange.name);
+        formData.append('title', this.handleInputChange.title);
+        formData.append('html',this.htmlEditor.current.editor.getValue());
+        formData.append('css',this.cssEditor.current.editor.getValue());
+        formData.append('js',this.jsEditor.current.editor.getValue());
+        //htmlSobr.append('html',this.htmlEditor.current.editor.getValue());
+        let htmlSobr = formData.get('html',this.htmlEditor);
+
+        console.log(htmlSobr)
+
+         fetch("http://u96470ux.beget.tech/changePageData",{
+             method: 'POST',
+             body: formData
+         })
             .then(response=>response.json())
             .then(result=>console.log(result))
-    }
-
-    componentDidMount() {
-        console.log("Вызвана функция componentDidMount")
     }
     handleInputChange(event){
         const target = event.target;
@@ -48,10 +71,8 @@ export class AddPage extends React.Component {
             [name]: value
         })
     }
-
-
     render() {
-        return<div>
+        return <div>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
                     <a className="nav-link active" id="nav-html-tab" data-toggle="tab" href="#nav-html" role="tab"
