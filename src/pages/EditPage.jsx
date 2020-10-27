@@ -6,6 +6,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "emmet-core"
 import "ace-builds/src-noconflict/ext-emmet"
+import {host} from "../config";
 
 export class EditPage extends React.Component{
     constructor() {
@@ -15,58 +16,52 @@ export class EditPage extends React.Component{
         this.jsEditor = createRef();
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.state = {
+            name: "",
+            title: "",
+            pageId: ""
+        }
     }
     componentDidMount() {
-        const formData = new FormData();
         const uri = window.location.pathname.split("/");
         const pageId = uri[uri.length-1];
-        formData.append("pageId",pageId);
-        fetch("http://u96470ux.beget.tech/editPage", {
+        this.setState({pageId:pageId})
+        let formData = new FormData();
+        formData.append('pageId',pageId);
+        fetch(host+"getPageByIdJSON",{
             method: 'POST',
             body: formData
-        })
-            .then((response)=>response.json())
-            .then((page)=>{
-                this.htmlEditor.current.editor.setValue(page.html)
-                this.cssEditor.current.editor.setValue(page.css)
-                this.jsEditor.current.editor.setValue(page.js)
-                //this.handleInputChange.name(page.name)
-                //this.handleInputChange.title(page.title)
-                 /*this.handleInputChange({
-                     [name]: page.name
-                 })*/
+        }).then(response=>response.json())
+            .then(page=>{
+                this.htmlEditor.current.editor.setValue(page.html);
+                this.cssEditor.current.editor.setValue(page.css);
+                this.jsEditor.current.editor.setValue(page.js);
+                this.setState({
+                    name: page.name,
+                    title: page.title
+                })
             })
 
     }
     handleSave(){
-
-        //let cssSobr;
-        //let jsSobr;
         let formData = new FormData();
-        const uri = window.location.pathname.split("/");
-        const pageId = uri[uri.length-1];
-        formData.append("pageId",pageId);
-        formData.append('name', this.handleInputChange.name);
-        formData.append('title', this.handleInputChange.title);
-        formData.append('html',this.htmlEditor.current.editor.getValue());
+        formData.append('pageId',this.state.pageId);
+        formData.append('name',this.state.name);
+        formData.append('title',this.state.title);
+        formData.append('html',this.htmlEditor.current.editor.getValue())
         formData.append('css',this.cssEditor.current.editor.getValue());
         formData.append('js',this.jsEditor.current.editor.getValue());
-        //htmlSobr.append('html',this.htmlEditor.current.editor.getValue());
-        let htmlSobr = formData.get('html',this.htmlEditor);
-
-        console.log(htmlSobr)
-
-         fetch("http://u96470ux.beget.tech/changePageData",{
-             method: 'POST',
-             body: formData
-         })
-            .then(response=>response.json())
-            .then(result=>console.log(result))
+        fetch(host+"editPageById",{
+            method: 'POST',
+            body: formData
+        }).then(response=>response.json())
+            .then(result=>console.log('ВСЁ ОК'))
     }
     handleInputChange(event){
         const target = event.target;
         const value = target.value;
         const name = target.name;
+
         this.setState({
             [name]: value
         })
@@ -126,10 +121,10 @@ export class EditPage extends React.Component{
                 <div className="tab-pane fade" id="nav-extraHTML" role="tabpanel" aria-labelledby="nav-extraHTML-tab">
                     <div className="col-10 mx-auto my-3">
                         <div className="mb-3">
-                            <input name="name" onChange={this.handleInputChange} type="text" className="form-control" placeholder="URI страницы"/>
+                            <input value={this.state.name} name="name" onChange={this.handleInputChange} type="text" className="form-control" placeholder="URI страницы"/>
                         </div>
                         <div className="mb-3">
-                            <input name="title" onChange={this.handleInputChange} type="text" className="form-control" placeholder="Заголовок страницы"/>
+                            <input name="title" value={this.state.title} onChange={this.handleInputChange} type="text" className="form-control" placeholder="Заголовок страницы"/>
                         </div>
                     </div>
                 </div>

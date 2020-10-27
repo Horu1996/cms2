@@ -6,6 +6,8 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "emmet-core"
 import "ace-builds/src-noconflict/ext-emmet"
+import {host} from "../config";
+
 export class AddPage extends React.Component {
     constructor() {
         super();
@@ -29,7 +31,7 @@ export class AddPage extends React.Component {
         formData.append('js',this.jsEditor.current.editor.getValue())
 
 
-        fetch("http://u96470ux.beget.tech/addPage",{
+        fetch(host+"addPage",{
             method: 'POST',
             body: formData
         })
