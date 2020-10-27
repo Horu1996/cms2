@@ -7,6 +7,8 @@ import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "emmet-core"
 import "ace-builds/src-noconflict/ext-emmet"
 import {host} from "../config";
+import {Redirect} from "react-router-dom";
+
 
 export class EditPage extends React.Component{
     constructor() {
@@ -17,6 +19,7 @@ export class EditPage extends React.Component{
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
+            referrer: null,
             name: "",
             title: "",
             pageId: ""
@@ -54,8 +57,13 @@ export class EditPage extends React.Component{
         fetch(host+"editPageById",{
             method: 'POST',
             body: formData
-        }).then(response=>response.json())
-            .then(result=>console.log('ВСЁ ОК'))
+        })
+            .then(response=>response.json())
+            .then(res=>{
+                this.setState({
+                    referrer:"/pages/" }
+                )
+            });
     }
     handleInputChange(event){
         const target = event.target;
@@ -67,6 +75,8 @@ export class EditPage extends React.Component{
         })
     }
     render() {
+        const referrer = this.state.referrer;
+        if (referrer) return <Redirect to={referrer}/>
         return <div>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -78,7 +88,7 @@ export class EditPage extends React.Component{
                        aria-controls="nav-js" aria-selected="false">JS</a>
                     <a className="nav-link" id="nav-extraHTML-tab" data-toggle="tab" href="#nav-extraHTML" role="tab"
                        aria-controls="nav-extraHTML" aria-selected="false">Параметры</a>
-                    <button onClick={this.handleSave} className="btn btn-light ml-auto">[сохранить]</button>
+                    <button className="btn btn-light ml-auto" onClick={this.handleSave}>Изменить</button>
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">

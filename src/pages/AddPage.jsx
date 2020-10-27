@@ -7,6 +7,7 @@ import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "emmet-core"
 import "ace-builds/src-noconflict/ext-emmet"
 import {host} from "../config";
+import {Redirect} from "react-router-dom";
 
 export class AddPage extends React.Component {
     constructor() {
@@ -17,6 +18,7 @@ export class AddPage extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
+            referrer: null,
             name: "",
             title: ""
         }
@@ -36,7 +38,12 @@ export class AddPage extends React.Component {
             body: formData
         })
             .then(response=>response.json())
-            .then(result=>console.log(result))
+            .then(res=> {
+                this.setState({
+                        referrer: "/pages/"
+                    }
+                )
+            });
     }
 
     componentDidMount() {
@@ -53,6 +60,8 @@ export class AddPage extends React.Component {
 
 
     render() {
+        const referrer = this.state.referrer;
+        if (referrer) return <Redirect to={referrer}/>
         return<div>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
