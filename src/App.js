@@ -7,6 +7,7 @@ import {AddPage} from "./pages/AddPage";
 import {EditPage} from "./pages/EditPage";
 import {Branches} from "./pages/Branches";
 import {AddBranch} from "./pages/AddBranch";
+import {EditBranch} from "./pages/EditBranch";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                         <Route path="/pages/editPage" render={()=> <EditPage/>}/>
                         <Route exact path="/branches/" render={()=><Branches/>}/>
                         <Route path="/branches/addBranch" render={()=><AddBranch/>}/>
+                        <Route path="/branches/editBranch" render={()=> <EditBranch/>}/>
                     </div>
                 </div>
             </BrowserRouter>
