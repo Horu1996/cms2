@@ -1,13 +1,13 @@
 import React, {createRef} from "react";
 import {NavLink} from "react-router-dom";
-import {host} from "../config";
+import {cmsPath, host} from "../config";
 
 const Tr = (props)=>{
     return <tr>
         <th scope="row">{props.index}</th>
         <td>{props.name_rus}</td>
         <td>{props.name}</td>
-        <td><NavLink to={"editBranch/"+props.branchId}>[редактировать]</NavLink></td>
+        <td><NavLink to={"editBranch/"+props.branchId}><i className="fas fa-pen"></i> редактировать</NavLink></td>
     </tr>
 }
 
@@ -47,7 +47,7 @@ export class Branches extends React.Component{
                 </tbody>
             </table>
 
-            <NavLink className="btn btn-primary" to="addBranch">Добавить раздел сайта</NavLink>
+            <NavLink className="btn btn-primary" to="addBranch"><i className="fas fa-plus-square"></i> Добавить раздел сайта</NavLink>
         </div>
     }
 }

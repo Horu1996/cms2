@@ -1,5 +1,5 @@
 import React, {createRef} from "react";
-import {host} from "../config";
+import {cmsPath, host} from "../config";
 import {Redirect} from "react-router-dom";
 
 
@@ -60,7 +60,7 @@ export class EditBranch extends React.Component{
     }
     render() {
         const referrer = this.state.referrer;
-        if (referrer) return <Redirect to={referrer}/>
+        if (referrer) return <Redirect to={cmsPath+referrer}/>
         return <div>
             <h2 className="my-4 text-center">Добавить раздел сайта</h2>
             <div className="mb-3">

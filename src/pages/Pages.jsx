@@ -7,7 +7,7 @@ const Tr = (props)=>{
         <th scope="row">{props.index}</th>
         <td>{props.title}</td>
         <td>{props.name}</td>
-        <td><NavLink to={"editPage/"+props.pageId}>[редактировать]</NavLink></td>
+        <td><NavLink to={"editPage/"+props.pageId}><i className="fas fa-pen"></i> редактировать</NavLink></td>
     </tr>
 }
 
@@ -46,7 +46,7 @@ export class Pages extends React.Component{
                 </tbody>
             </table>
 
-            <NavLink className="btn btn-primary" to="addPage">Добавить страницу</NavLink>
+            <NavLink className="btn btn-primary" to="addPage"><i className="fas fa-plus-square"></i> Добавить страницу</NavLink>
         </div>
     }
 }
